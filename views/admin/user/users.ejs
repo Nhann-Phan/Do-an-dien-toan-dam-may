@@ -1,0 +1,66 @@
+<div class="hidden">
+<%- include('../partials/header') %>
+</div>
+
+<div class="flex min-h-screen">
+    <%- include('../partials/sidebar', { page: 'users' }) %>
+
+    <main class="flex-1 p-10 bg-slate-50">
+        
+        <header class="flex justify-between items-end mb-10">
+            <div>
+                <h1 class="text-xl font-black italic uppercase tracking-tighter text-slate-800">Danh sách nhân sự</h1>
+                <p class="text-slate-400 font-bold text-[10px] uppercase mt-2 tracking-widest">Hệ thống Tuổi Trẻ Cười</p>
+            </div>
+        </header>
+
+        <div class="bg-white rounded-[1.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-900 text-white font-black text-[10px] uppercase tracking-[0.2em]">
+                        <th class="px-8 py-6">Họ Tên</th>
+                        <th class="px-8 py-6">Tài khoản</th>
+                        <th class="px-8 py-6">Quyền</th>
+                        <th class="px-8 py-6">Số điện thoại</th>
+                        <th class="px-8 py-6 text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <% users.forEach(u => { %>
+                        <tr class="hover:bg-slate-50/80 transition group">
+                            <td class="px-8 py-6">
+                                <span class="font-bold text-slate-700"><%= u.fullName %></span>
+                            </td>
+                            <td class="px-8 py-6">
+                                <span class="text-slate-400 font-medium italic"><%= u.username %></span>
+                            </td>
+                            <td class="px-8 py-6">
+                                <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase <%= u.role === 'admin' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-600' %>">
+                                    <%= u.role %>
+                                </span>
+                            </td>
+                            <td class="px-8 py-6 text-xs font-bold text-slate-500 font-mono">
+                                <%= u.phone %>
+                            </td>
+                            <td class="px-8 py-6 text-center">
+                                <% if(u.role !== 'admin') { %>
+                                    <a href="/admin/users/delete/<%= u._id %>" 
+                                       onclick="return confirm('Xóa thằng này hả Nhân?')" 
+                                       class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition shadow-sm">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </a>
+                                <% } else { %>
+                                    <span class="text-slate-200"><i class="bi bi-shield-lock-fill text-xl"></i></span>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</div>
+
+<div class="hidden">
+<%- include('../partials/footer') %>
+</div>

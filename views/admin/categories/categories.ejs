@@ -1,0 +1,67 @@
+<div style="display: none;">
+<%- include('../partials/header', { title: 'Quản lý Danh mục' }) %>
+</div>
+<div class="flex min-h-screen">
+    
+    <%- include('../partials/sidebar', { page: 'categories' }) %>
+
+    <main class="flex-1 p-10 bg-slate-50">
+        <header class="flex justify-between items-end mb-10">
+            <div>
+                <h2 class="text-xl font-black text-slate-800 tracking-tight uppercase italic">Quản lý Danh mục</h2>
+                <p class="text-slate-500 text-sm mt-2 font-medium">Phân loại tin tức để giao diện trang chủ gọn gàng hơn</p>
+            </div>
+            
+            <a href="/admin/categories/add" class="group flex items-center space-x-3 px-8 py-4 bg-slate-900 text-white rounded-[1.5rem] font-black text-sm hover:bg-black shadow-xl transition transform hover:-translate-y-1">
+                <i class="bi bi-folder-plus text-lg"></i>
+                <span>THÊM DANH MỤC MỚI</span>
+            </a>
+        </header>
+
+        <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="bg-slate-50/50 border-b border-slate-100 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                        <th class="p-7">Biểu tượng</th>
+                        <th class="p-7">Tên chuyên mục</th>
+                        <th class="p-7 text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    <% cats.forEach(cat => { %>
+                    <tr class="hover:bg-slate-50/30 transition group">
+                        <td class="p-7">
+                            <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 group-hover:rotate-6 transition duration-300">
+                                <img src="<%= cat.icon %>" class="w-10 h-10 object-contain" onerror="this.src='https://via.placeholder.com/50'">
+                            </div>
+                        </td>
+                        <td class="p-7">
+                            <span class="font-black text-slate-800 uppercase tracking-tighter text-lg italic"><%= cat.name %></span>
+                        </td>
+                        <td class="p-7 text-center">
+                            <div class="flex justify-center items-center space-x-4">
+                                <a href="/admin/categories/edit/<%= cat._id %>" class="px-5 py-2.5 bg-amber-50 text-amber-600 rounded-xl font-black text-[10px] uppercase hover:bg-amber-500 hover:text-white transition shadow-sm">
+                                    <i class="bi bi-pencil-square mr-1"></i> Sửa
+                                </a>
+                                <a href="/admin/categories/delete/<%= cat._id %>" 
+                                   onclick="return confirm('Xóa cái này là mất chuyên mục ngoài trang chủ đó Nhân, chắc chưa?')" 
+                                   class="px-5 py-2.5 bg-red-50 text-red-500 rounded-xl font-black text-[10px] uppercase hover:bg-red-500 hover:text-white transition shadow-sm">
+                                    <i class="bi bi-trash3-fill mr-1"></i> Xóa
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            
+            <% if (cats.length === 0) { %>
+                <div class="py-20 text-center bg-slate-50/30">
+                    <i class="bi bi-folder-x text-5xl text-slate-200"></i>
+                    <p class="mt-4 text-slate-400 font-bold italic uppercase tracking-widest text-xs">Chưa có danh mục!</p>
+                </div>
+            <% } %>
+        </div>
+    </main>
+</div> 
+<!-- <%- include('../partials/footer') %> -->

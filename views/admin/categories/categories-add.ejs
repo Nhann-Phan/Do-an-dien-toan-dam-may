@@ -1,0 +1,49 @@
+<%- include('../partials/header', { title: 'Thêm Danh mục' }) %>
+
+<div class="flex min-h-screen">
+    <%- include('../partials/sidebar', { page: 'categories' }) %>
+
+    <main class="flex-1 p-10 bg-slate-50">
+        <div class="max-w-xl mx-auto">
+            <a href="/admin/categories" class="group flex items-center text-slate-400 hover:text-slate-800 text-sm font-bold transition mb-8">
+                <i class="bi bi-arrow-left-short text-xl mr-1 transition group-hover:-translate-x-1"></i> 
+                QUAY LẠI DANH SÁCH
+            </a>
+            
+            <form action="/admin/categories/add" method="POST" enctype="multipart/form-data" class="bg-white p-12 rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-100">
+                <div class="flex items-center space-x-4 mb-12">
+                    <div class="bg-slate-900 p-4 rounded-2xl shadow-lg">
+                        <i class="bi bi-folder-plus text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-black text-slate-800 tracking-tighter uppercase italic">Tạo mục mới</h2>
+                </div>
+                
+                <div class="space-y-10">
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-[0.2em]">Tên chuyên mục</label>
+                        <input type="text" name="name" placeholder="VD: CHUYỆN BI HÀI" required 
+                               class="w-full px-6 py-5 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-slate-100 focus:bg-white outline-none transition font-bold text-slate-700 uppercase italic">
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-[0.2em]">Icon đại diện (.png)</label>
+                        <div class="relative group">
+                            <input type="file" name="icon" required 
+                                   class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                            <div class="w-full px-6 py-5 rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 group-hover:border-slate-400 group-hover:bg-slate-100 transition flex items-center justify-center space-x-3 text-slate-400 group-hover:text-slate-900">
+                                <i class="bi bi-image-fill text-2xl"></i>
+                                <span class="text-sm font-black uppercase tracking-widest">Chọn ảnh Icon</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-6 bg-slate-900 text-white font-black rounded-3xl shadow-xl hover:bg-black hover:-translate-y-1 active:scale-[0.98] transition transform uppercase tracking-[0.2em] text-sm">
+                        Lưu danh mục
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<!-- <%- include('../partials/footer') %> -->

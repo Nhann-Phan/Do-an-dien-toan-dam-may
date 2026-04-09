@@ -1,0 +1,31 @@
+<%- include('../admin/partials/header', { title: 'Tìm kiếm' }) %>
+
+<body class="bg-slate-50">
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <h2 class="text-xl font-black italic uppercase mb-10 border-l-8 border-red-600 pl-6">
+            Kết quả tìm kiếm cho: "<span class="text-red-600"><%= query %></span>"
+        </h2>
+
+        <% if (articles.length > 0) { %>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <% articles.forEach(item => { %>
+                    <a href="/article/<%= item._id %>" class="group bg-white rounded-[2rem] overflow-hidden shadow-lg border border-slate-100 hover:-translate-y-2 transition duration-500">
+                        <div class="h-56 overflow-hidden">
+                            <img src="<%= item.image_url %>" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        </div>
+                        <div class="p-6">
+                            <span class="text-[10px] font-black text-red-600 uppercase tracking-widest"><%= item.category %></span>
+                            <h4 class="text-lg font-black text-slate-800 mt-2 line-clamp-2 leading-tight group-hover:text-red-600 transition"><%= item.title %></h4>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="text-center py-20">
+                <i class="bi bi-search text-6xl text-slate-200"></i>
+                <p class="text-slate-400 font-bold italic mt-4">Không tìm thấy kết quả</p>
+                <a href="/" class="text-red-600 underline font-bold mt-4 block">Quay về trang chủ</a>
+            </div>
+        <% } %>
+    </main>
+</body>

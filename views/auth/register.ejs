@@ -1,0 +1,56 @@
+<div class="hidden">
+<%- include('../admin/partials/header', { title: 'Đăng ký Tác giả' }) %>
+</div>
+
+<body class="bg-slate-50 flex items-center justify-center min-h-screen py-20">
+    <div class="max-w-xl w-full bg-white p-10 lg:p-16 rounded-[3rem] shadow-2xl border border-slate-100 mx-4">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-black italic uppercase tracking-tighter text-slate-800">Đăng ký Tác giả</h2>
+            <!-- <p class="text-slate-400 text-xs font-bold mt-2 uppercase tracking-widest">Dành cho các Tác giả tương lai</p> -->
+        </div>
+
+        <form action="/auth/register" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="md:col-span-2">
+                <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Họ và Tên</label>
+                <input type="text" name="fullName" required placeholder="Nhập tên thật của mày"
+                    class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-red-500 transition outline-none font-bold">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Tên đăng nhập</label>
+                <input type="text" name="username" required placeholder="username"
+                    class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-red-500 transition outline-none font-bold">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Mật khẩu</label>
+                <input type="password" name="password" required placeholder="••••••••"
+                    class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-red-500 transition outline-none font-bold">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Số điện thoại</label>
+                <input type="text" name="phone" required placeholder="09xxx..."
+                    class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-red-500 transition outline-none font-bold">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Địa chỉ</label>
+                <input type="text" name="address" placeholder="Có thể để trống ..."
+                    class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-red-500 transition outline-none font-bold">
+            </div>
+
+            <div class="md:col-span-2 mt-4">
+                <button type="submit" 
+                    class="w-full bg-slate-900 text-white font-black py-5 rounded-3xl hover:bg-red-600 transition shadow-xl uppercase tracking-widest text-xs">
+                    Đăng ký làm Tác giả
+                </button>
+            </div>
+        </form>
+
+        <p class="mt-10 text-center text-xs text-slate-400 font-bold uppercase tracking-tighter">
+            Đã có danh phận? <a href="/auth/login" class="text-red-600 hover:underline">Đăng nhập ngay</a>
+        </p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<div class="hidden">
+    <%- include('../admin/partials/header', { title: 'Đăng nhập' }) %>
+</div>
+
+<body class="bg-slate-50 flex items-center justify-center min-h-screen">
+    <div class="max-w-md w-full bg-white p-10 lg:p-16 rounded-[4rem] shadow-2xl border border-slate-100 mx-4">
+        
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-black italic uppercase tracking-tighter text-slate-800">Đăng nhập</h2>
+            <!-- <p class="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-[0.2em]">Hệ thống Tuổi Trẻ Cười</p> -->
+        </div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-600 rounded-r-2xl animate-bounce">
+                <p class="text-red-600 text-[11px] font-black uppercase italic">
+                    <i class="bi bi-exclamation-triangle-fill mr-2"></i> <%= error %>
+                </p>
+            </div>
+        <% } %>
+
+        <form action="/auth/login" method="POST" class="space-y-6">
+            <div>
+                <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Tên đăng nhập</label>
+                <input type="text" name="username" required 
+                    value="<%= typeof oldUsername !== 'undefined' ? oldUsername : '' %>"
+                    class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl focus:ring-2 focus:ring-amber-400 transition outline-none font-bold text-slate-700">
+            </div>
+            <div>
+                <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Mật khẩu</label>
+                <input type="password" name="password" required
+                    class="w-full px-8 py-5 bg-slate-50 border-none rounded-3xl focus:ring-2 focus:ring-amber-400 transition outline-none font-bold text-slate-700">
+            </div>
+            <button type="submit" 
+                class="w-full bg-amber-400 text-slate-900 font-black py-5 rounded-3xl hover:bg-slate-900 hover:text-white transition shadow-xl shadow-amber-100 uppercase tracking-widest text-xs mt-4">
+                Vào hệ thống
+            </button>
+        </form>
+
+        <div class="mt-12 pt-8 border-t border-slate-50 text-center">
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-tighter">
+                Chưa có tài khoản? <a href="/auth/register" class="text-red-600 hover:underline">Đăng ký Tác giả</a>
+            </p>
+        </div>
+    </div>
+
+<script>
+    const hasError = '<%= typeof error !== "undefined" ? "true" : "" %>';
+    
+    if (hasError === 'true') {
+        // Nếu có lỗi thì xóa mật khẩu
+        const passInput = document.querySelector('input[type="password"]');
+        if (passInput) passInput.value = '';
+
+        document.querySelector('form').classList.add('animate-shake');
+    }
+</script>
+</body>
+</html>

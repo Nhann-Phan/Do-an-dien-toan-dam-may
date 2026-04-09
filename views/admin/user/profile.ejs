@@ -1,0 +1,48 @@
+<div class="hidden">
+<%- include('../partials/header') %>
+</div>
+<div class="flex min-h-screen">
+    <%- include('../partials/sidebar', { page: 'profile' }) %>
+    <main class="flex-1 p-10 bg-slate-50">
+        <h1 class="text-xl font-black italic uppercase mb-10 text-slate-800">Thông tin cá nhân</h1>
+
+        <form action="/admin/profile/update" method="POST" class="max-w-2xl bg-white p-10 rounded-[3rem] shadow-xl border border-slate-100 space-y-6">
+            
+            <div>
+                <label class="block text-[10px] font-black uppercase text-red-500 mb-2 ml-4">Xác nhận mật khẩu cũ để thay đổi thông tin</label>
+                <input type="password" name="currentPassword" required placeholder="Nhập mật khẩu hiện tại để xác nhận" 
+                    class="w-full px-6 py-4 bg-red-50 rounded-2xl border-none outline-none font-bold focus:ring-2 focus:ring-red-200">
+            </div>
+
+            <hr class="border-slate-100">
+
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Họ và Tên</label>
+                    <input type="text" name="fullName" value="<%= user.fullName %>" class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none font-bold">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Số điện thoại</label>
+                    <input type="text" name="phone" value="<%= user.phone %>" class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none font-bold">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Địa chỉ</label>
+                <input type="text" name="address" value="<%= user.address %>" class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none font-bold">
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-black uppercase text-slate-400 mb-2 ml-4">Mật khẩu mới</label>
+                <input type="password" name="newPassword" placeholder="••••••••" class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none font-bold">
+            </div>
+
+            <button type="submit" class="w-full bg-slate-900 text-white font-black py-5 rounded-2xl hover:bg-red-600 transition shadow-lg uppercase text-xs tracking-widest">
+                Cập nhật thông tin mạy
+            </button>
+        </form>
+    </main>
+</div>
+<div class="hidden">
+<%- include('../partials/footer') %>
+</div>

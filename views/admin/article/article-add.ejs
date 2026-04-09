@@ -1,0 +1,88 @@
+<div class="hidden">
+<%- include('../partials/header', { title: 'Đăng bài mới' }) %>
+</div>
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+<style>
+    /* Chỉnh cho khung soạn thảo cao hơn tí nhìn cho sướng */
+    .ck-editor__editable { min-height: 400px !important; border-radius: 0 0 1.5rem 1.5rem !important; }
+    .ck-toolbar { border-radius: 1.5rem 1.5rem 0 0 !important; border: none !important; background: #f8fafc !important; }
+</style>
+
+<div class="flex min-h-screen">
+    <%- include('../partials/sidebar', { page: 'dashboard' }) %>
+
+    <main class="flex-1 p-10 bg-slate-50">
+        <div class="max-w-4xl mx-auto">
+            <a href="/admin" class="group flex items-center text-slate-400 hover:text-slate-800 text-sm font-bold transition mb-8">
+                <i class="bi bi-arrow-left-short text-xl mr-1 transition group-hover:-translate-x-1"></i> 
+                DANH SÁCH BÀI VIẾT
+            </a>
+            
+            <form action="/admin/add" method="POST" enctype="multipart/form-data" class="bg-white p-12 rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-100">
+                <div class="flex items-center space-x-4 mb-12">
+                    <div class="bg-red-600 p-4 rounded-2xl shadow-lg shadow-red-200">
+                        <i class="bi bi-journal-plus text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-black text-slate-800 tracking-tighter uppercase italic">Đăng tin mới</h2>
+                </div>
+                
+                <div class="space-y-10">
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-[0.2em]">Tiêu đề bài báo</label>
+                        <input type="text" name="title" placeholder="Nhập tiêu đề hấp dẫn vào đây..." required 
+                               class="w-full px-6 py-5 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-red-50 focus:bg-white outline-none transition font-bold text-slate-700 text-lg placeholder:text-slate-300">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-[0.2em]">Chuyên mục</label>
+                            <select name="category" required 
+                                    class="w-full px-6 py-5 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-red-50 outline-none transition font-bold text-slate-600 cursor-pointer appearance-none bg-white text-sm">
+                                <option value="" disabled selected>-- Chọn chuyên mục --</option>
+                                <% if (typeof cats !== 'undefined' && cats.length > 0) { %>
+                                    <% cats.forEach(cat => { %>
+                                        <option value="<%= cat.name %>" class="uppercase font-bold"><%= cat.name %></option>
+                                    <% }) %>
+                                <% } %>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-[0.2em]">Ảnh minh họa</label>
+                            <div class="relative group">
+                                <input type="file" name="image" required 
+                                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                <div class="w-full px-6 py-5 rounded-2xl bg-slate-50 border-2 border-dashed border-slate-200 group-hover:border-red-400 group-hover:bg-red-50 transition flex items-center justify-center space-x-3 text-slate-400 group-hover:text-red-600">
+                                    <i class="bi bi-cloud-arrow-up text-2xl"></i>
+                                    <span class="text-sm font-bold uppercase tracking-widest">Chọn file ảnh</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-[0.2em]">Tóm tắt ngắn</label>
+                        <textarea name="summary" rows="2" placeholder="Tóm tắt nội dung chính..." 
+                                  class="w-full px-6 py-5 rounded-2xl bg-slate-50 border-none focus:ring-4 focus:ring-red-50 focus:bg-white outline-none transition font-medium text-slate-600"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black uppercase text-slate-400 mb-3 tracking-[0.2em]">Nội dung chi tiết</label>
+                        <textarea name="content" id="editor" placeholder="Viết nội dung tại đây..."></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-6 bg-red-600 text-white font-black rounded-3xl shadow-2xl shadow-red-200 hover:bg-red-700 hover:-translate-y-1 active:scale-[0.98] transition transform uppercase tracking-[0.2em] text-sm">
+                        Đăng bài
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script>
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .catch(error => { console.error(error); });
+</script>
