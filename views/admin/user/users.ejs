@@ -1,5 +1,5 @@
 <div class="hidden">
-<%- include('../partials/header') %>
+    <%- include('../partials/header', { title: 'Quản lý Nhân sự' }) %>
 </div>
 
 <div class="flex min-h-screen">
@@ -10,7 +10,9 @@
         <header class="flex justify-between items-end mb-10">
             <div>
                 <h1 class="text-xl font-black italic uppercase tracking-tighter text-slate-800">Danh sách nhân sự</h1>
-                <p class="text-slate-400 font-bold text-[10px] uppercase mt-2 tracking-widest">Hệ thống Tuổi Trẻ Cười</p>
+                <p class="text-slate-400 font-bold text-[10px] uppercase mt-2 tracking-widest">
+                    Trang <strong><%= currentPage %></strong> / <strong><%= totalPages %></strong> (8 nhân sự mỗi trang)
+                </p>
             </div>
         </header>
 
@@ -50,13 +52,42 @@
                                         <i class="bi bi-trash3-fill"></i>
                                     </a>
                                 <% } else { %>
-                                    <span class="text-slate-200"><i class="bi bi-shield-lock-fill text-xl"></i></span>
+                                    <span class="text-slate-200" title="Admin tối cao, không thể xóa!"><i class="bi bi-shield-lock-fill text-xl"></i></span>
                                 <% } %>
                             </td>
                         </tr>
                     <% }) %>
                 </tbody>
             </table>
+
+            <div class="px-8 py-6 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    Hệ thống Tuổi Trẻ Cười - Trang <%= currentPage %>
+                </p>
+
+                <div class="flex space-x-2">
+                    <% if (currentPage > 1) { %>
+                        <a href="/admin/users?page=<%= currentPage - 1 %>" 
+                           class="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white transition shadow-sm flex items-center">
+                            <i class="bi bi-chevron-left mr-2"></i> Trước
+                        </a>
+                    <% } %>
+
+                    <% if (currentPage < totalPages) { %>
+                        <a href="/admin/users?page=<%= currentPage + 1 %>" 
+                           class="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white transition shadow-sm flex items-center">
+                            Sau <i class="bi bi-chevron-right ml-2"></i>
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+
+            <% if (users.length === 0) { %>
+                <div class="py-20 text-center">
+                    <i class="bi bi-people text-5xl text-slate-100"></i>
+                    <p class="mt-4 text-slate-400 font-bold italic text-xs uppercase tracking-widest">Không có nhân sự nào trong danh sách</p>
+                </div>
+            <% } %>
         </div>
     </main>
 </div>

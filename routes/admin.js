@@ -23,13 +23,40 @@ const isAdmin = (req, res, next) => {
 // ==========================================
 
 // Danh sách bài viết (Admin thấy hết, Author thấy bài mình)
+// routes/admin.js
+
 router.get('/', isLoggedIn, async (req, res) => {
     try {
+        const page = parseInt(req.query.page) || 1; // Trang hiện tại
+        const limit = 5; // Chốt 5 bài mỗi trang
+        const skip = (page - 1) * limit;
+
+        // Xác định bộ lọc dựa trên Role
         let query = {};
-        if (req.session.userRole === 'author') query = { authorId: req.session.userId };
-        const articles = await Article.find(query).sort({ created_at: -1 });
-        res.render('admin/dashboard', { title: 'Bảng điều khiển', articles, page: 'dashboard' });
-    } catch (err) { res.status(500).send(err.message); }
+        if (req.session.userRole === 'author') {
+            query = { authorId: req.session.userId };
+        }
+
+        // 1. Lấy danh sách bài viết có phân trang
+        const articles = await Article.find(query)
+            .sort({ created_at: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        // 2. Đếm tổng số bài viết thuộc bộ lọc này
+        const totalArticles = await Article.countDocuments(query);
+        const totalPages = Math.ceil(totalArticles / limit);
+
+        res.render('admin/dashboard', { 
+            title: 'Bảng điều khiển', 
+            articles, 
+            page: 'dashboard',
+            currentPage: page,
+            totalPages
+        });
+    } catch (err) { 
+        res.status(500).send("Lỗi Dashboard: " + err.message); 
+    }
 });
 
 // Thêm bài mới
@@ -173,21 +200,46 @@ router.post('/profile/update', isLoggedIn, async (req, res) => {
     }
 });
 
+// --- QUẢN LÝ DANH MỤC ---
 router.get('/categories', isLoggedIn, isAdmin, async (req, res) => {
-    const cats = await Category.find();
-    res.render('admin/categories/categories', { title: 'Quản lý Danh mục', cats, page: 'categories' });
-});
-
-router.get('/users', isLoggedIn, isAdmin, async (req, res) => {
     try {
-        const users = await User.find().sort({ created_at: -1 });
-        res.render('admin/user/users', { title: 'Quản lý Người dùng', users, page: 'users' }); 
+        const page = parseInt(req.query.page) || 1;
+        const limit = 5;
+        const skip = (page - 1) * limit;
+
+        const cats = await Category.find().skip(skip).limit(limit);
+        const totalCats = await Category.countDocuments();
+        const totalPages = Math.ceil(totalCats / limit);
+
+        res.render('admin/categories/categories', { 
+            title: 'Quản lý Danh mục', 
+            cats, 
+            page: 'categories',
+            currentPage: page,
+            totalPages
+        });
     } catch (err) { res.status(500).send(err.message); }
 });
 
-router.get('/users/delete/:id', isLoggedIn, isAdmin, async (req, res) => {
-    await User.findByIdAndDelete(req.params.id);
-    res.redirect('/admin/users');
+// --- QUẢN LÝ NGƯỜI DÙNG ---
+router.get('/users', isLoggedIn, isAdmin, async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 4;
+        const skip = (page - 1) * limit;
+
+        const users = await User.find().sort({ created_at: -1 }).skip(skip).limit(limit);
+        const totalUsers = await User.countDocuments();
+        const totalPages = Math.ceil(totalUsers / limit);
+
+        res.render('admin/user/users', { 
+            title: 'Quản lý Người dùng', 
+            users, 
+            page: 'users',
+            currentPage: page,
+            totalPages
+        });
+    } catch (err) { res.status(500).send(err.message); }
 });
 
 module.exports = router;

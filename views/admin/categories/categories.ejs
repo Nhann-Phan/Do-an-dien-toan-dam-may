@@ -1,6 +1,7 @@
 <div style="display: none;">
-<%- include('../partials/header', { title: 'Quản lý Danh mục' }) %>
+    <%- include('../partials/header', { title: 'Quản lý Danh mục' }) %>
 </div>
+
 <div class="flex min-h-screen">
     
     <%- include('../partials/sidebar', { page: 'categories' }) %>
@@ -9,7 +10,9 @@
         <header class="flex justify-between items-end mb-10">
             <div>
                 <h2 class="text-xl font-black text-slate-800 tracking-tight uppercase italic">Quản lý Danh mục</h2>
-                <p class="text-slate-500 text-sm mt-2 font-medium">Phân loại tin tức để giao diện trang chủ gọn gàng hơn</p>
+                <p class="text-slate-500 text-sm mt-2 font-medium">
+                    Trang <strong><%= currentPage %></strong> / <strong><%= totalPages %></strong> (8 danh mục mỗi trang)
+                </p>
             </div>
             
             <a href="/admin/categories/add" class="group flex items-center space-x-3 px-8 py-4 bg-slate-900 text-white rounded-[1.5rem] font-black text-sm hover:bg-black shadow-xl transition transform hover:-translate-y-1">
@@ -54,6 +57,28 @@
                     <% }) %>
                 </tbody>
             </table>
+
+            <div class="px-8 py-6 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    TRANG <%= currentPage %> / <%= totalPages %>
+                </p>
+
+                <div class="flex space-x-2">
+                    <% if (currentPage > 1) { %>
+                        <a href="/admin/categories?page=<%= currentPage - 1 %>" 
+                           class="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white transition shadow-sm flex items-center">
+                            <i class="bi bi-chevron-left mr-2"></i> Trước
+                        </a>
+                    <% } %>
+
+                    <% if (currentPage < totalPages) { %>
+                        <a href="/admin/categories?page=<%= currentPage + 1 %>" 
+                           class="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-900 hover:text-white transition shadow-sm flex items-center">
+                            Sau <i class="bi bi-chevron-right ml-2"></i>
+                        </a>
+                    <% } %>
+                </div>
+            </div>
             
             <% if (cats.length === 0) { %>
                 <div class="py-20 text-center bg-slate-50/30">
@@ -64,4 +89,6 @@
         </div>
     </main>
 </div> 
-<!-- <%- include('../partials/footer') %> -->
+<div style="display: none;">
+<%- include('../partials/footer') %>
+</div>
