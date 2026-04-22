@@ -10,7 +10,6 @@ router.get('/', async (req, res) => {
         const cats = await Category.find();
         const allArticles = await Article.find().sort({ created_at: -1 });
 
-        // Phân loại cho Menu (Xu hướng, Nổi bật, Đề xuất)
         const trending = await Article.find().sort({ views: -1 }).limit(5);
         const featured = await Article.find().sort({ likes: -1 }).limit(5);
         const recommended = await Article.find().sort({ created_at: -1 }).limit(5);
@@ -33,10 +32,42 @@ router.get('/', async (req, res) => {
     }
 });
 
-// --- 2. TRANG CHI TIẾT BÀI VIẾT ---
+// --- 2. TRANG CHUYÊN MỤC (PHÂN TRANG 7 BÀI/TRANG) ---
+router.get('/category/:name', async (req, res) => {
+    try {
+        const categoryName = req.params.name;
+        const page = parseInt(req.query.page) || 1; // Lấy trang hiện tại, mặc định là 1
+        const limit = 6; // Chốt 7 bài một trang theo ý Nhân
+        const skip = (page - 1) * limit;
+
+        // Lấy bài viết thuộc category + Phân trang
+        const articles = await Article.find({ category: categoryName })
+            .sort({ created_at: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        // Tính toán tổng số trang
+        const totalArticles = await Article.countDocuments({ category: categoryName });
+        const totalPages = Math.ceil(totalArticles / limit);
+
+        const cats = await Category.find();
+
+        res.render('client/category-page', { 
+            title: `Chuyên mục: ${categoryName}`, 
+            articles, 
+            categoryName,
+            categories: cats,
+            currentPage: page,
+            totalPages
+        });
+    } catch (err) {
+        res.status(500).send("Lỗi chuyên mục: " + err.message);
+    }
+});
+
+// --- 3. TRANG CHI TIẾT BÀI VIẾT ---
 router.get('/article/:id', async (req, res) => {
     try {
-        // Tăng views và lấy bài viết
         const article = await Article.findByIdAndUpdate(
             req.params.id, 
             { $inc: { views: 1 } }, 
@@ -45,12 +76,9 @@ router.get('/article/:id', async (req, res) => {
 
         if (!article) return res.status(404).send("Bài viết không tồn tại!");
 
-        // Lấy bình luận (Fix lỗi bài này không hiện cmt)
         const comments = await Comment.find({ articleId: req.params.id }).sort({ createdAt: -1 });
-
         const cats = await Category.find(); 
         
-        // Lấy tin mới (Fix lỗi ReferenceError: latestArticles is not defined)
         const latestArticles = await Article.find({ _id: { $ne: article._id } })
                                             .sort({ created_at: -1 })
                                             .limit(5);
@@ -64,7 +92,7 @@ router.get('/article/:id', async (req, res) => {
     }
 });
 
-// --- 3. GỬI BÌNH LUẬN ---
+// --- 4. GỬI BÌNH LUẬN ---
 router.post('/article/:id/comment', async (req, res) => {
     try {
         const { content } = req.body;
@@ -88,7 +116,7 @@ router.post('/article/:id/comment', async (req, res) => {
     }
 });
 
-// --- 4. LIKE & DISLIKE VẠN NĂNG (Bật/Tắt/Chuyển đổi) ---
+// --- 5. LIKE & DISLIKE ---
 router.post('/article/:id/vote', async (req, res) => {
     try {
         const { likeDelta, dislikeDelta } = req.body;
@@ -103,32 +131,48 @@ router.post('/article/:id/vote', async (req, res) => {
     }
 });
 
-// routes/index.js (hoặc file route trang chủ của mày)
+// --- 6. TÌM KIẾM ---
+// routes/client.js
+
 router.get('/search', async (req, res) => {
     try {
-        const query = req.query.keyword; // Lấy chữ cái mày gõ từ ô input
+        const query = req.query.keyword; 
         if (!query) return res.redirect('/');
 
-        // Tìm trong Database: Tiêu đề hoặc Tóm tắt có chứa chữ đó
-        const articles = await Article.find({
+        const page = parseInt(req.query.page) || 1; // Lấy trang hiện tại
+        const limit = 6; // Hiện 6 kết quả mỗi lần theo ý Nhân
+        const skip = (page - 1) * limit;
+
+        // Điều kiện tìm kiếm dùng chung cho cả việc lấy dữ liệu và đếm
+        const searchFilter = {
             $or: [
                 { title: { $regex: query, $options: 'i' } },
                 { summary: { $regex: query, $options: 'i' } }
             ]
-        }).sort({ created_at: -1 });
+        };
 
-        // Lấy thêm danh mục để hiện trên menu (nếu cần)
+        // 1. Tìm bài viết có phân trang
+        const articles = await Article.find(searchFilter)
+            .sort({ created_at: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        // 2. Đếm tổng số bài khớp để tính số trang
+        const totalArticles = await Article.countDocuments(searchFilter);
+        const totalPages = Math.ceil(totalArticles / limit);
+
         const cats = await Category.find();
 
-        // Render ra trang kết quả
         res.render('client/search-results', { 
             title: `Kết quả cho: ${query}`, 
             articles, 
-            cats, 
-            query 
+            categories: cats, 
+            query,
+            currentPage: page,
+            totalPages
         });
     } catch (err) {
-        res.send("Lỗi rồi Nhân ơi: " + err.message);
+        res.status(500).send("Lỗi tìm kiếm rồi Nhân: " + err.message);
     }
 });
 

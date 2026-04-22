@@ -1,4 +1,4 @@
-<%- include('../admin/partials/header', { title: 'Tìm kiếm' }) %>
+<%- include('../admin/partials/header', { title: title }) %>
 
 <body class="bg-slate-50">
     <main class="max-w-7xl mx-auto px-4 py-12">
@@ -20,12 +20,42 @@
                     </a>
                 <% }) %>
             </div>
+
+            <div class="mt-16 flex justify-center items-center space-x-4">
+                
+                <% if (currentPage > 1) { %>
+                    <a href="/search?keyword=<%= query %>&page=<%= currentPage - 1 %>" 
+                       class="px-6 py-3 bg-white border border-slate-200 rounded-2xl font-black text-xs uppercase hover:bg-red-600 hover:text-white transition shadow-sm">
+                        <i class="bi bi-chevron-left mr-1"></i> Trước
+                    </a>
+                <% } %>
+
+                <div class="px-6 py-3 bg-slate-100 rounded-2xl font-black text-slate-400 text-[10px] uppercase tracking-widest">
+                    Trang <%= currentPage %> / <%= totalPages %>
+                </div>
+
+                <% if (currentPage < totalPages) { %>
+                    <a href="/search?keyword=<%= query %>&page=<%= currentPage + 1 %>" 
+                       class="px-6 py-3 bg-white border border-slate-200 rounded-2xl font-black text-xs uppercase hover:bg-red-600 hover:text-white transition shadow-sm">
+                        Sau <i class="bi bi-chevron-right ml-1"></i>
+                    </a>
+                <% } %>
+
+            </div>
+
         <% } else { %>
-            <div class="text-center py-20">
-                <i class="bi bi-search text-6xl text-slate-200"></i>
-                <p class="text-slate-400 font-bold italic mt-4">Không tìm thấy kết quả</p>
-                <a href="/" class="text-red-600 underline font-bold mt-4 block">Quay về trang chủ</a>
+            <div class="text-center py-20 bg-white rounded-[3rem] shadow-sm border border-slate-100">
+                <div class="mb-6 relative inline-block">
+                    <i class="bi bi-search text-7xl text-slate-100"></i>
+                    <i class="bi bi-x-circle-fill text-2xl text-red-500 absolute -bottom-2 -right-2"></i>
+                </div>
+                <p class="text-slate-400 font-bold italic text-lg">Không tìm thấy bài nào có chữ "<%= query %>" hết Nhân ơi!</p>
+                <a href="/" class="inline-block mt-8 px-8 py-3 bg-slate-900 text-white rounded-full font-black text-xs uppercase tracking-widest hover:bg-red-600 transition shadow-lg">
+                    Quay về trang chủ
+                </a>
             </div>
         <% } %>
     </main>
 </body>
+
+<%- include('../admin/partials/footer') %>

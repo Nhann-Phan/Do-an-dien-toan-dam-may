@@ -3,106 +3,44 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <style>
+    /* Thêm cái này để fix lỗi Swiper bị tràn hoặc lệch */
+    .swiper { width: 100%; height: 100%; }
     .line-clamp-2 { display: -webkit-box; line-clamp: 2; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .news-card-gradient { background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%); }
-    .swiper-slide { height: auto; }
 </style>
 
-<div class="bg-white min-h-screen font-sans" x-data="{ open: false }">
-    
-    <!-- <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between relative">
-            <div class="flex items-center space-x-6">
-                <a href="/" class="flex-shrink-0">
-                    <img src="https://static.mediacdn.vn/tuoitre/web_images/logo-pc.png" class="h-12">
-                </a>
-                <button @click="open = !open" class="flex items-center space-x-2 p-2 hover:bg-slate-100 rounded-xl transition group">
-                    <div class="space-y-1.5">
-                        <span class="block w-6 h-0.5 bg-slate-800 transition-transform" :class="open ? 'rotate-45 translate-y-2' : ''"></span>
-                        <span class="block w-6 h-0.5 bg-slate-800 transition-opacity" :class="open ? 'opacity-0' : ''"></span>
-                        <span class="block w-3 h-0.5 bg-slate-800 transition-transform" :class="open ? '-rotate-45 -translate-y-2 w-6' : ''"></span>
-                    </div>
-                    <span class="font-black text-xs uppercase tracking-widest text-slate-700 hidden md:block">Chuyên mục</span>
-                </button>
-            </div>
-
-            <nav class="hidden lg:flex items-center space-x-10 text-[13px] font-black uppercase italic tracking-tighter text-slate-700">
-                <a href="#" class="hover:text-red-600 transition">XU HƯỚNG</a>
-                <a href="#" class="hover:text-red-600 transition">NỔI BẬT</a>
-                <a href="#" class="hover:text-red-600 transition">ĐỀ XUẤT</a>
-            </nav>
-
-            <div class="flex items-center space-x-4">
-                <a href="/admin" class="bg-amber-400 hover:bg-amber-500 px-6 py-2 rounded-full font-black text-[11px] uppercase transition shadow-lg shadow-amber-100">ADMIN</a>
-                <button class="p-2 hover:bg-slate-100 rounded-full transition"><i class="bi bi-search text-2xl"></i></button>
-            </div>
-
-            <div x-show="open" @click.away="open = false" x-transition class="absolute top-full left-0 w-full bg-white border-b shadow-2xl p-8 z-40">
-                <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <% sections.forEach(section => { %>
-                        <a href="#<%= section.name %>" @click="open = false" class="group flex items-center space-x-4 p-3 rounded-2xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
-                            <div class="w-12 h-12 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center group-hover:scale-110 transition duration-300 overflow-hidden">
-                                <img src="<%= section.icon %>" class="w-8 h-8 object-contain">
-                            </div>
-                            <span class="font-black text-[11px] uppercase tracking-tighter text-slate-600 group-hover:text-red-600"><%= section.name %></span>
-                        </a>
-                    <% }) %>
-                </div>
-            </div>
-        </div>
-    </header> -->
-
+<div class="bg-white min-h-screen font-sans pt-5" x-data="{ open: false }">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <main class="max-w-7xl mx-auto px-4 py-10">
-
-        <section class="mb-20 overflow-hidden">
-            <span class="text-lg font-black uppercase italic mb-4 block"> TIN MỚI CẬP NHẬT </span>
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        <section class="mb-16">
+            <span class="text-lg font-black uppercase italic mb-6 block underline decoration-red-600 decoration-4 underline-offset-8"> 
+                TIN MỚI CẬP NHẬT 
+            </span>
+            
+            <div class="relative">
                 <div class="swiper latestSwiper">
-                <div class="swiper-wrapper">
-                    <% latestArticles.forEach(item => { %>
-                        <div class="swiper-slide">
-                            <a href="/article/<%= item._id %>" class="group block relative rounded-[2rem] overflow-hidden shadow-xl aspect-[3/4]">
-                                <img src="<%= item.image_url %>" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
-                                <div class="absolute inset-0 news-card-gradient"></div>
-                                <div class="absolute bottom-0 p-6">
-                                    <span class="bg-white/20 backdrop-blur-md text-white text-[8px] px-2 py-1 rounded font-black uppercase mb-3 inline-block"><%= item.category %></span>
-                                    <h3 class="text-white font-black text-sm leading-tight italic line-clamp-3"><%= item.title %></h3>
-                                </div>
-                            </a>
-                        </div>
-                    <% }) %>
-                </div>
-                </div>
-        </section>
-
-        <% if (typeof topArticle !== 'undefined' && topArticle) { %>
-        <!-- <section class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-20">
-            <a href="/article/<%= topArticle._id %>" class="lg:col-span-8 group block">
-                <div class="relative overflow-hidden rounded-[2.5rem] shadow-2xl shadow-slate-200">
-                    <img src="<%= topArticle.image_url %>" class="w-full h-[500px] object-cover group-hover:scale-105 transition duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                    <div class="absolute bottom-0 p-10">
-                        <span class="px-4 py-1 bg-red-600 text-white text-[10px] font-black uppercase rounded-full mb-4 inline-block"><%= topArticle.category %></span>
-                        <h2 class="text-4xl font-black text-white leading-tight italic tracking-tighter"><%= topArticle.title %></h2>
+                    <div class="swiper-wrapper">
+                        <% latestArticles.forEach(item => { %>
+                            <div class="swiper-slide">
+                                <a href="/article/<%= item._id %>" class="group block relative rounded-[2.5rem] overflow-hidden shadow-lg aspect-[3/4.5]">
+                                    <img src="<%= item.image_url %>" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                                    <div class="absolute inset-0 news-card-gradient"></div>
+                                    <div class="absolute bottom-0 p-6 w-full">
+                                        <object>
+                                            <a href="/category/<%= item.category %>" class="bg-red-600 text-white text-[8px] px-2 py-1 rounded font-black uppercase mb-3 inline-block hover:bg-white hover:text-red-600 transition">
+                                                <%= item.category %>
+                                            </a>
+                                        </object>
+                                        <h3 class="text-white font-black text-sm leading-tight italic line-clamp-3"><%= item.title %></h3>
+                                    </div>
+                                </a>
+                            </div>
+                        <% }) %>
                     </div>
                 </div>
-            </a>
-            
-            <div class="lg:col-span-4 space-y-8">
-                <h3 class="text-xl font-black border-l-4 border-red-600 pl-4 uppercase italic">Tin nóng hổi</h3>
-                <% sections[0].list.slice(1, 4).forEach(side => { %>
-                    <a href="/article/<%= side._id %>" class="flex space-x-4 group block">
-                        <img src="<%= side.image_url %>" class="w-24 h-24 rounded-2xl object-cover shadow-sm border">
-                        <div class="flex-1">
-                            <h4 class="font-bold text-slate-800 text-sm line-clamp-2 group-hover:text-red-600 transition"><%= side.title %></h4>
-                            <p class="text-[10px] text-slate-400 mt-2 font-black uppercase italic"><%= side.category %></p>
-                        </div>
-                    </a>
-                <% }) %>
             </div>
-        </section> -->
-        <% } %>
+        </section>
 
         <% if (typeof sections !== 'undefined') { %>
             <% sections.forEach(section => { %>
@@ -111,8 +49,13 @@
                     <div class="flex items-center justify-between mb-10 border-b-2 border-slate-100 pb-4">
                         <div class="flex items-center space-x-3">
                             <img src="<%= section.icon %>" class="w-10 h-10 object-contain">
-                            <h2 class="text-3xl font-black uppercase italic tracking-tighter text-slate-800"><%= section.name %></h2>
+                            <a href="/category/<%= section.name %>" class="hover:text-red-600 transition">
+                                <h2 class="text-3xl font-black uppercase italic tracking-tighter text-slate-800"><%= section.name %></h2>
+                            </a>
                         </div>
+                        <a href="/category/<%= section.name %>" class="text-[10px] font-black uppercase text-slate-400 hover:text-red-600 transition flex items-center">
+                            Xem tất cả <i class="bi bi-arrow-right ml-2"></i>
+                        </a>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -122,7 +65,11 @@
                                     <div class="relative overflow-hidden rounded-[2rem] shadow-lg shadow-slate-200/50 mb-5 bg-slate-100 aspect-video">
                                         <img src="<%= item.image_url %>" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                                         <div class="absolute top-4 left-4">
-                                            <span class="px-3 py-1 bg-white/95 text-[9px] font-black rounded-lg shadow-sm uppercase"><%= item.category %></span>
+                                            <object>
+                                                <a href="/category/<%= item.category %>" class="px-3 py-1 bg-white/95 text-[9px] font-black rounded-lg shadow-sm uppercase hover:bg-red-600 hover:text-white transition">
+                                                    <%= item.category %>
+                                                </a>
+                                            </object>
                                         </div>
                                     </div>
                                     <h3 class="font-bold text-slate-800 leading-snug text-md line-clamp-2 group-hover:text-red-600 transition px-1"><%= item.title %></h3>
@@ -138,11 +85,25 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
-    new Swiper(".latestSwiper", {
-        slidesPerView: 2, spaceBetween: 20, loop: true, grabCursor: true,
-        autoplay: { delay: 3000, disableOnInteraction: false },
-        breakpoints: { 1024: { slidesPerView: 5 } }
+    // Đợi DOM load xong hoàn toàn mới chạy Swiper
+    document.addEventListener('DOMContentLoaded', function () {
+        new Swiper(".latestSwiper", {
+            slidesPerView: 2,
+            spaceBetween: 15, // Giảm khoảng cách lại chút cho đẹp
+            loop: true,
+            centeredSlides: false, // Để false để nó không bị đẩy ra giữa màn hình
+            grabCursor: true,
+            autoplay: { 
+                delay: 3500, 
+                disableOnInteraction: false 
+            },
+            breakpoints: { 
+                640: { slidesPerView: 3 },
+                1024: { slidesPerView: 5 } 
+            }
+        });
     });
 </script>
 

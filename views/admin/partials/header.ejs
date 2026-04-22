@@ -65,11 +65,17 @@
                 <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
                     <% if (typeof categories !== 'undefined') { %>
                         <% categories.forEach(cat => { %>
-                            <a href="/#<%= cat.name %>" @click="open = false" class="group flex items-center space-x-4 p-3 rounded-2xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
+                            <a href="/category/<%= cat.name %>" 
+                            @click="open = false" 
+                            class="group flex items-center space-x-4 p-3 rounded-2xl hover:bg-slate-50 transition border border-transparent hover:border-slate-100">
+                                
                                 <div class="w-12 h-12 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center group-hover:scale-110 transition duration-300 overflow-hidden">
                                     <img src="<%= cat.icon %>" class="w-8 h-8 object-contain">
                                 </div>
-                                <span class="font-black text-[11px] uppercase tracking-tighter text-slate-600 group-hover:text-red-600"><%= cat.name %></span>
+                                
+                                <span class="font-black text-[11px] uppercase tracking-tighter text-slate-600 group-hover:text-red-600">
+                                    <%= cat.name %>
+                                </span>
                             </a>
                         <% }) %>
                     <% } %>

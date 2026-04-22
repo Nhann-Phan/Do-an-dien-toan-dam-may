@@ -1,0 +1,53 @@
+<%- include('../admin/partials/header', { title: title }) %>
+
+<main class="max-w-7xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-black italic uppercase mb-10 border-l-8 border-red-600 pl-6">
+        <%= categoryName %>
+    </h1>
+
+    <% if (articles.length > 0) { %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <% articles.forEach(item => { %>
+                <a href="/article/<%= item._id %>" class="group bg-white rounded-[2rem] overflow-hidden shadow-lg border border-slate-100 hover:-translate-y-2 transition duration-500">
+                    <div class="h-56 overflow-hidden">
+                        <img src="<%= item.image_url %>" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-lg font-black text-slate-800 mt-2 line-clamp-2 group-hover:text-red-600 transition">
+                            <%= item.title %>
+                        </h4>
+                        <p class="text-sm text-slate-500 mt-3 line-clamp-2"><%= item.summary %></p>
+                    </div>
+                </a>
+            <% }) %>
+        </div>
+
+        <div class="mt-16 flex justify-center items-center space-y-0 space-x-4">
+            <% if (currentPage > 1) { %>
+                <a href="/category/<%= categoryName %>?page=<%= currentPage - 1 %>" 
+                   class="px-6 py-3 bg-white border border-slate-200 rounded-2xl font-black text-xs uppercase hover:bg-red-600 hover:text-white transition shadow-sm">
+                    <i class="bi bi-chevron-left"></i> Trang trước
+                </a>
+            <% } %>
+
+            <div class="px-6 py-3 bg-slate-100 rounded-2xl font-black text-slate-400 text-xs">
+                TRANG <%= currentPage %> / <%= totalPages %>
+            </div>
+
+            <% if (currentPage < totalPages) { %>
+                <a href="/category/<%= categoryName %>?page=<%= currentPage + 1 %>" 
+                   class="px-6 py-3 bg-white border border-slate-200 rounded-2xl font-black text-xs uppercase hover:bg-red-600 hover:text-white transition shadow-sm">
+                    Trang sau <i class="bi bi-chevron-right"></i>
+                </a>
+            <% } %>
+        </div>
+
+    <% } else { %>
+        <div class="py-24 text-center">
+            <i class="bi bi-emoji-frown text-6xl text-slate-200"></i>
+            <p class="mt-4 text-slate-400 font-bold italic uppercase tracking-widest text-xs">Chuyên mục này chưa có bài nào mạy ơi!</p>
+        </div>
+    <% } %>
+</main>
+
+<%- include('../admin/partials/footer') %>
